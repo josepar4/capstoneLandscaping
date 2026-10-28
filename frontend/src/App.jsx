@@ -1,31 +1,33 @@
-import { useEffect, useState } from 'react'
+const TABS = ['Today', 'Clients', 'Calendar', 'Invoices', 'Route']
 
 function App() {
-  const [health, setHealth] = useState(null)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetch('/api/health')
-      .then((res) => {
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-        return res.json()
-      })
-      .then((data) => setHealth(data))
-      .catch((err) => setError(err.message))
-  }, [])
+  const currentTab = 'Today'
 
   return (
-    <main>
-      <h1>Landscaping Business Manager</h1>
-      {error && <p>Error: {error}</p>}
-      {!health && !error && <p>Checking the backend...</p>}
-      {health && (
-        <>
-          <p>Backend status: {health.status}</p>
-          <p>Database: {health.database}</p>
-        </>
-      )}
-    </main>
+    <div className="stage">
+      <div className="phone">
+        <div className="app">
+          <div className="status" aria-hidden="true"></div>
+          <main id="view" tabIndex={-1} className="blank">
+            <header className="top">
+              <h1>{currentTab}</h1>
+            </header>
+          </main>
+          <nav className="tabs" aria-label="Main">
+            {TABS.map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                className="tab"
+                aria-current={tab === currentTab ? 'page' : undefined}
+              >
+                {tab}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+    </div>
   )
 }
 
